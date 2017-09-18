@@ -1,18 +1,34 @@
 from shapes import *
+import random
 
+random.randint(40,100)
+random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+hexagon(random.randint(10,100),random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+, random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+)
 
-hexagon()
+octagon(random.randint(10,100),random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+, random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+)
 
-octagon()
+pentagon(random.randint(10,100),random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+, random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+)
 
-pentagon()
+square(random.randint(10,100),random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+, random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+)
 
-square()
+star(random.randint(10,100),random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+, random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+)
 
-star()
+triangle(random.randint(10,100),random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+, random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+)
 
-triangle()
-
-circle2(20,'red', 'blue')
+circle2(random.randint(10,100),random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+, random.choice( ["red","green","blue","orange","purple","pink","yellow"] )
+)
 
 mainloop()
