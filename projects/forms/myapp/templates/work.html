@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Work or Sleep
+
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <form action="/work" method="post">
+      <div class="form-group">
+        <label for="exampleSelect1">Which day is it?</label>
+        <select name="day" class="form-control" id="exampleSelect1">
+          <option>Sunday</option>
+          <option>Monday</option>
+          <option>Tuesday</option>
+          <option>Wednesday</option>
+          <option>Thursday</option>
+          <option>Friday</option>
+          <option>Saturday</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
