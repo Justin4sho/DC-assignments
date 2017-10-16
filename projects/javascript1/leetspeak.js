@@ -8,8 +8,8 @@ function leetspeak (string) {
 
   for (var i = 0;i < normal.length;i++) {
     while (paragraph.indexOf(normal[i]) > 0 ) {
-      paragraph= paragraph.replace(normal[i], leet[i])
-    };
+      paragraph= paragraph.replace(normal[i], leet[i]);
+    }
   }
   console.log(paragraph);
 }
