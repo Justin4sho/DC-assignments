@@ -20,7 +20,21 @@
 // /greet/Manny it should say "Hello, Manny!"
 // etc...
 // ----------------------------------
-
+// Templates 2
+//
+// Create this array in your server program:
+//
+// var animals = [
+//   { name: 'cats', favorite: true },
+//   { name: 'dogs', favorite: true },
+//   { name: 'tree frogs', favorite: true },
+//   { name: 'earth worms', favorite: false },
+//   { name: 'guinea pigs', favorite: true },
+// ];
+// Feel free to change to match your current state of mind.
+//
+// Create a page at the URL /fav_animals that will render an ordered list of those animals which are your favorite.
+// ----------------------------------
 
 
 var express = require('express');
@@ -57,6 +71,21 @@ app.get('/hello', function(request,response) {
   var age = parseInt(request.query.age) || 25;
   var year = 2017 - age;
   response.send('You were born in ' + year + '.');
+})
+
+app.get('/fav_animals', function(request, response) {
+  // var name = request.query.name || 'Name ??';
+  var animals = [
+    { name: 'cats', favorite: true },
+    { name: 'dogs', favorite: true },
+    { name: 'tree frogs', favorite: true },
+    { name: 'earth worms', favorite: false },
+    { name: 'guinea pigs', favorite: true },
+  ];
+  var context = {
+    animals: animals,
+  }
+  response.render('fav.hbs', context);
 })
 
 app.listen(8000, function () {
