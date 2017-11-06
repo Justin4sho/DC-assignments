@@ -79,10 +79,11 @@ app.get('/fav_animals', function(request, response) {
     { name: 'cats', favorite: true },
     { name: 'dogs', favorite: true },
     { name: 'tree frogs', favorite: true },
-    { name: 'earth worms', favorite: false },
+    { name: 'earth worms', favorite: false }, 
     { name: 'guinea pigs', favorite: true },
   ];
   var context = {
+    title: 'Favorite Animals',
     animals: animals,
   }
   response.render('fav.hbs', context);
