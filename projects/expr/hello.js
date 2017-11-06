@@ -40,7 +40,9 @@
 var express = require('express');
 var app = express();
 
+app.use(express.static('public'));
 app.set('view engine', 'hbs');
+
 
 
 app.get('/', function (request, response) {
@@ -79,7 +81,7 @@ app.get('/fav_animals', function(request, response) {
     { name: 'cats', favorite: true },
     { name: 'dogs', favorite: true },
     { name: 'tree frogs', favorite: true },
-    { name: 'earth worms', favorite: false }, 
+    { name: 'earth worms', favorite: false },
     { name: 'guinea pigs', favorite: true },
   ];
   var context = {
