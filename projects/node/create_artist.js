@@ -32,13 +32,8 @@ var writeArtist = function (artistName) {
     VALUES (default, ${name}) RETURNING id';
   db.one(q, artistInfo)
     .then(function (result) {
-      console.log(result.id);
+      console.log('Created artist with ID ', result.id);
     });
-  // var q = 'SELECT curval("id")';
-  // db.one(q)
-  //   .then(function(result){
-  //     console.log(result);
-  //   })
 }
 
 var main = function () {

@@ -40,10 +40,10 @@ var writeAlbum = function (albumName, albumYear, artistID) {
     artist_ID: artistID
   };
   var q = 'INSERT INTO album \
-    VALUES (default, ${name}, ${year}, ${artist_ID})';
-  db.result(q, albumInfo)
+    VALUES (default, ${name}, ${year}, ${artist_ID}) RETURNING id';
+  db.one(q, albumInfo)
     .then(function (result) {
-      console.log(result);
+      console.log('Created Album with ID ',result.id);
     });
 }
 
@@ -52,11 +52,13 @@ var main = function () {
     .then(function (inputs) {
       var albumName = inputs[0];
       var albumYear = inputs[1];
-      var artistID = inputs[2]:
+      var artistID = inputs[2];
       writeAlbum(albumName, albumYear, artistID);
+      pgp.end()
     })
     .catch(function (error) {
       console.error(error);
+      pgp.end()
     });
 }
 
