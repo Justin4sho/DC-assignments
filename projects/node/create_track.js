@@ -19,13 +19,13 @@ var getUserInputs = new Promise(
       inputs.push(value);
       return prompt('Please enter Track Duration: ');
     })
-    // then save the file name and return as resolved
+
     .then(function (value) {
       inputs.push(value);
       prompt.done();
       resolve(inputs);
     })
-    // catch errors while prompting and return as rejected
+
     .catch(function (error) {
       prompt.finish();
       reject(error);
