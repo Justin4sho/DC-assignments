@@ -21,14 +21,35 @@ app.get('/', function (req, resp) {
   resp.render('index.hbs',context);
 });
 //renders search results
-app.get('/search', function (req, resp) {
+app.get('/search', function (req, resp, next) {
   var searchTerm = req.query.searchTerm;
-  var context = {
-    title: 'Restaurants'
-  }
-  resp.render('search_results.hbs',context);
-
+  var q = "SELECT * from restaurant \
+  WHERE name ILIKE '%$1#%'"
+  db.any(q, searchTerm)
+    .then(function(results) {
+      resp.render('search_results.hbs', {
+        title:'Search Results',
+        results: results
+      });
+      console.log(results);
+    })
+    .catch(next);
 });
+
+app.get('/restaurant/:id',function (req,resp,next) {
+  var  i_d = req.params.id;
+  var q = 'SELECT * from restaurant \
+  WHERE id = $1';
+  db.one(q,i_d)
+    .then(function (results) {
+      console.log(results);
+      resp.render('restaurant.hbs', {title: 'Restaurant', results: results});
+    })
+    .catch(function(err) {
+      resp.redirect('/');
+    };
+
+})
 
 
 
