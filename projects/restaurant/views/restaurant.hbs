@@ -1,8 +1,16 @@
-<h3></h3>
+<h3>{{results.[0].name}}</h3>
+<h3>{{results.[0].address}}</h3>
+<h3>{{results.[0].category}}</h3>
 {{#each results}}
 
-  <li>   {{name}}  <b>ADDRESS: </b> {{address}} <b>CATEGORY: </b>   {{category}}
+  <li>   <b>STARS: </b> {{stars}}  <b>Title: </b> {{title}} <b>Review: </b>   {{review}} <b>NAME: </b> {{rev_name}} <b>E-MAIL: </b> {{email}} <b>KARMA: </b> {{karma}}
 
   </li>
 
 {{/each}}
+
+<br />
+<form action="/addReview" method="GET">
+  <input type="hidden" name="id" value="{{results.[0].restaurant_id}}">
+  <button type="submit" value="submit">Add review</button>  
+</form>

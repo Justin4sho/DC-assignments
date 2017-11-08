@@ -37,20 +37,45 @@ app.get('/search', function (req, resp, next) {
 });
 
 app.get('/restaurant/:id',function (req,resp,next) {
-  var  i_d = req.params.id;
+  var i_d = req.params.id;
   var q = 'SELECT * from restaurant \
-  WHERE id = $1';
-  db.one(q,i_d)
+  INNER JOIN review ON restaurant.id = review.restaurant_id \
+  LEFT OUTER JOIN reviewer ON reviewer.id = review.reviewer_id \
+  WHERE restaurant.id = $1';
+  db.any(q,i_d)
     .then(function (results) {
       console.log(results);
       resp.render('restaurant.hbs', {title: 'Restaurant', results: results});
     })
-    .catch(function(err) {
-      resp.redirect('/');
-    };
+    .catch(next);
 
+});
+
+app.get('/addReview', function(req, resp) {
+  var id = req.query.id;
+  resp.render('addReview.hbs', {title: 'Add Review', id: id});
 })
 
+app.post('/addReview', function(req, resp, next) {
+  var id = req.body.id;
+  var stars = parseInt(req.body.stars);
+  var title = req.body.title;
+  var review = req.body.review;
+  var columns = {
+    stars: stars,
+    title: title,
+    review: review,
+    restaurant_id: id
+  }
+  console.log(columns);
+  var q = 'INSERT INTO review \
+  VALUES (default, ${stars}, ${title}, ${review}, Null, ${restaurant_id}) RETURNING id'
+  db.any(q, columns)
+    .then(function (results) {
+      resp.redirect('/restaurant/' + id);
+    })
+
+})
 
 
 //starts up server on port 8000
