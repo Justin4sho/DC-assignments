@@ -63,9 +63,27 @@ app.post('/addReview', function(req, resp, next) {
   .catch(next);
 })
 
-app.get('/restaurant/new', function(req, resp, next){
+app.get('/restaurant/new', function(req, resp){
   resp.render('addRestaurant.hbs', {title: 'Add a Restaurant'});
 });
+
+app.post('/restaurant/submit_new', function(req, resp, next) {
+  var name = req.body.name;
+  var address = req.body.address;
+  var category = req.body.category;
+  var columns = {
+    name: name,
+    address: address,
+    category: category,
+  }
+  var q = 'INSERT INTO restaurant \
+  VALUES (default, ${name}, ${address}, ${category}) RETURNING id'
+  db.any(q, columns)
+    .then(function (results) {
+      resp.redirect('/restaurant/' + results.id);
+    })
+  .catch(next);
+})
 
 
 app.get('/restaurant/:id',function (req,resp,next) {
