@@ -36,20 +36,6 @@ app.get('/search', function (req, resp, next) {
     .catch(next);
 });
 
-app.get('/restaurant/:id',function (req,resp,next) {
-  var i_d = req.params.id;
-  var q = 'SELECT * from restaurant \
-  INNER JOIN review ON restaurant.id = review.restaurant_id \
-  LEFT OUTER JOIN reviewer ON reviewer.id = review.reviewer_id \
-  WHERE restaurant.id = $1';
-  db.any(q,i_d)
-    .then(function (results) {
-      console.log(results);
-      resp.render('restaurant.hbs', {title: 'Restaurant', results: results});
-    })
-    .catch(next);
-
-});
 
 app.get('/addReview', function(req, resp) {
   var id = req.query.id;
@@ -74,9 +60,28 @@ app.post('/addReview', function(req, resp, next) {
     .then(function (results) {
       resp.redirect('/restaurant/' + id);
     })
-
+  .catch(next);
 })
 
+app.get('/restaurant/new', function(req, resp, next){
+  resp.render('addRestaurant.hbs', {title: 'Add a Restaurant'});
+});
+
+
+app.get('/restaurant/:id',function (req,resp,next) {
+  var i_d = req.params.id;
+  var q = 'SELECT * from restaurant \
+  INNER JOIN review ON restaurant.id = review.restaurant_id \
+  LEFT OUTER JOIN reviewer ON reviewer.id = review.reviewer_id \
+  WHERE restaurant.id = $1';
+  db.any(q,i_d)
+    .then(function (results) {
+      console.log(results);
+      resp.render('restaurant.hbs', {title: 'Restaurant', results: results});
+    })
+    .catch(next);
+
+});
 
 //starts up server on port 8000
 app.listen(8888, function () {
