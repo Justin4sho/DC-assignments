@@ -55,7 +55,7 @@ app.post('/addReview', function(req, resp, next) {
   }
   console.log(columns);
   var q = 'INSERT INTO review \
-  VALUES (default, ${stars}, ${title}, ${review}, Null, ${restaurant_id}) RETURNING id'
+  VALUES (default, ${stars}, ${title}, ${review}, Null, ${restaurant_id}) RETURNING id';
   db.any(q, columns)
     .then(function (results) {
       resp.redirect('/restaurant/' + id);
@@ -77,9 +77,10 @@ app.post('/restaurant/submit_new', function(req, resp, next) {
     category: category,
   }
   var q = 'INSERT INTO restaurant \
-  VALUES (default, ${name}, ${address}, ${category}) RETURNING id'
-  db.any(q, columns)
+  VALUES (default, ${name}, ${address}, ${category}) RETURNING id';
+  db.one(q, columns)
     .then(function (results) {
+      console.log(results.id);
       resp.redirect('/restaurant/' + results.id);
     })
   .catch(next);
@@ -87,12 +88,13 @@ app.post('/restaurant/submit_new', function(req, resp, next) {
 
 
 app.get('/restaurant/:id',function (req,resp,next) {
-  var i_d = req.params.id;
+  var id = req.params.id;
   var q = 'SELECT * from restaurant \
   INNER JOIN review ON restaurant.id = review.restaurant_id \
   LEFT OUTER JOIN reviewer ON reviewer.id = review.reviewer_id \
   WHERE restaurant.id = $1';
-  db.any(q,i_d)
+  console.log('My ID is ' +  id);
+  db.any(q,id)
     .then(function (results) {
       console.log(results);
       resp.render('restaurant.hbs', {title: 'Restaurant', results: results});
