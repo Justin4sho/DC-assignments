@@ -89,8 +89,8 @@ app.post('/restaurant/submit_new', function(req, resp, next) {
 
 app.get('/restaurant/:id',function (req,resp,next) {
   var id = req.params.id;
-  var q = 'SELECT restaurant.id as id, restaurant.name, restaurant.address, restaurant.category, \
-  review.stars, review.title, review.title, reviewer.rev_name,reviewer.email, reviewer.karma from restaurant \
+  var q = 'SELECT restaurant.id, restaurant.name, restaurant.address, restaurant.category, \
+  review.stars, review.title, review.review, reviewer.rev_name,reviewer.email, reviewer.karma from restaurant \
   LEFT JOIN review ON restaurant.id = review.restaurant_id \
   LEFT JOIN reviewer ON reviewer.id = review.reviewer_id \
   WHERE restaurant.id = $1';
