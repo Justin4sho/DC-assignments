@@ -1,0 +1,17 @@
+{
+  "name": "sequelize_ex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^7.4.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.22.5",
+    "sequelize-cli": "^3.0.0"
+  }
+}
