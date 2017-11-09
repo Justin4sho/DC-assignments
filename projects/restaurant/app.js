@@ -94,7 +94,7 @@ app.get('/restaurant/:id',function (req,resp,next) {
   LEFT JOIN review ON restaurant.id = review.restaurant_id \
   LEFT JOIN reviewer ON reviewer.id = review.reviewer_id \
   WHERE restaurant.id = $1';
-  console.log('My ID is ' +  id);
+  // console.log('My ID is ' +  id);
   db.any(q,id)
     .then(function (results) {
       console.log(results);
