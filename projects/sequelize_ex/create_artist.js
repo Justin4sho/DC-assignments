@@ -1,9 +1,5 @@
-var pgp = require('pg-promise')({
-
-});
 var prompt = require('prompt-promise');
-
-var db = pgp({database: 'music'});
+var db = require('./models');
 
 var getUserInputs = new Promise(
   function (resolve, reject) {
@@ -25,15 +21,10 @@ var getUserInputs = new Promise(
 );
 
 var writeArtist = function (artistName) {
-  var artistInfo = {
-    name: artistName
-  };
-  var q = 'INSERT INTO artist \
-    VALUES (default, ${name}) RETURNING id';
-  db.one(q, artistInfo)
-    .then(function (result) {
-      console.log('Created artist with ID ', result.id);
-    });
+  db.artist.create({name:artistName})
+  .then(function (artist) {
+    console.log(artist);
+  });
 }
 
 var main = function () {
@@ -41,11 +32,11 @@ var main = function () {
     .then(function (inputs) {
       var artistName = inputs[0];
       writeArtist(artistName);
-      pgp.end()
+
     })
     .catch(function (error) {
       console.error(error);
-      pgp.end()
+      
     });
 }
 

@@ -14,12 +14,12 @@ module.exports = {
       duration: {
         type: Sequelize.STRING
       },
-      albumID: {
+      albumId: {
         type: Sequelize.INTEGER,
         references: {
-        model: 'albums',
-        key: 'id'
-      }
+          model: 'albums',
+          key: 'id',
+        }
       },
       createdAt: {
         allowNull: false,

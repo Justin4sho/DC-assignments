@@ -3,12 +3,10 @@ module.exports = (sequelize, DataTypes) => {
   var album = sequelize.define('album', {
     name: DataTypes.STRING,
     year: DataTypes.INTEGER
-  }, {
-    classMethods: {
-      associate: function(models) {
-        album.belongsTo(models.artist);        
-      }
-    }
   });
+  album.associate = function(models) {
+    album.belongsTo(models.artist);
+  };
+
   return album;
 };
