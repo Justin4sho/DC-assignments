@@ -14,8 +14,12 @@ module.exports = {
       duration: {
         type: Sequelize.STRING
       },
-      album_id: {
-        type: Sequelize.INTEGER
+      albumID: {
+        type: Sequelize.INTEGER,
+        references: {
+        model: 'albums',
+        key: 'id'
+      }
       },
       createdAt: {
         allowNull: false,
