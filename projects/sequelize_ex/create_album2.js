@@ -17,6 +17,10 @@ var getUserInputs = new Promise(
       inputs.push(value);
       return prompt('Please enter the artist ID: ');
     })
+    .then(function (value) {
+      inputs.push(value);
+      return prompt('Would you like to enter another? Y or N  ');
+    })
     // then save the file name and return as resolved
     .then(function (value) {
       inputs.push(value);
@@ -40,19 +44,23 @@ var writeAlbum = function (albumName, albumYear, artist_ID) {
 }
 
 var main = function () {
-  getUserInputs
-    .then(function (inputs) {
-      var albumName = inputs[0];
-      var albumYear = inputs[1];
-      var artistID = inputs[2];
-      writeAlbum(albumName, albumYear, artistID);
-      console.log(inputs);
+  var again = "Y";
+  while (again == "Y") {
+    getUserInputs
+      .then(function (inputs) {
+        var albumName = inputs[0];
+        var albumYear = inputs[1];
+        var artistID = inputs[2];
+        var again = inputs[3];
+        writeAlbum(albumName, albumYear, artistID);
+        console.log(inputs);
 
 
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
 }
 
 // Execute the main function

@@ -24,6 +24,7 @@ var writeArtist = function (artistName) {
   db.artist.create({name:artistName})
   .then(function (artist) {
     console.log(artist);
+    db.sequelize.close();
   });
 }
 
@@ -36,7 +37,6 @@ var main = function () {
     })
     .catch(function (error) {
       console.error(error);
-      
     });
 }
 

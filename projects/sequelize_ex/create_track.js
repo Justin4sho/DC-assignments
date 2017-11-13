@@ -33,6 +33,7 @@ var writeTrack = function (trackName, duration, album_ID) {
   db.track.create({name:trackName,duration:duration,albumId:album_ID})
   .then(function (track) {
     console.log(track);
+    db.sequelize.close();
   });
 }
 
