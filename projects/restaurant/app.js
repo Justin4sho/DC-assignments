@@ -24,11 +24,15 @@ app.use(session({
 
 app.use(function (req, resp, next) {
   if (req.session.user) {
+
     next();
-  } else if (req.path == '/' || req.path == '/login') {
-    next();
-  } else {
+  } else if (req.path.startsWith('/addReview')) {
+    // req.session.returnTo = req.path;
+    console.log(req.session.returnTo);
     resp.redirect('/login');
+  } else {
+
+    next();
   }
 });
 
@@ -74,11 +78,12 @@ app.post('/addReview', function(req, resp, next) {
     stars: stars,
     title: title,
     review: review,
-    restaurant_id: id
+    restaurant_id: id,
+    revId: req.session.rid
   }
   console.log(columns);
   var q = 'INSERT INTO review \
-  VALUES (default, ${stars}, ${title}, ${review}, Null, ${restaurant_id}) RETURNING id';
+  VALUES (default, ${stars}, ${title}, ${review}, ${revId} , ${restaurant_id}) RETURNING id';
   db.any(q, columns)
     .then(function (results) {
       resp.redirect('/restaurant/' + id);
@@ -125,7 +130,12 @@ app.post('/login', function(req, resp, next) {
       if (results.password == password) {
         req.session.user = results.email;
         req.session.name = results.rev_name;
+        req.session.rid = results.id;
+        console.log(results.id);
+        console.log(req.session.rid);
+        // console.log(req.session.returnTo);
         resp.redirect('/');
+        // req.session.returnTo = '';
       }
       else {
         resp.render('login.hbs',{ err: 'Incorrect Password' });
@@ -137,8 +147,10 @@ app.post('/login', function(req, resp, next) {
 });
 
 app.post('/logout', function (req,resp,next) {
-  req.session.user = '';
-  req.session.name = '';
+    req.session.destroy(function(err) {
+    // cannot access session here
+    })
+
   resp.redirect('/login');
 });
 

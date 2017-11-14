@@ -14,4 +14,6 @@
   <input type="hidden" name="id" value="{{results.[0].id}}">
   <button type="submit" value="submit">Add review</button>
 </form>
-<h2>Hello, {{name}}!</h2>
+{{#if name}}
+  Hello {{name}}
+{{/if}}
