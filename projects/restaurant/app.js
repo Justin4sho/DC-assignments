@@ -25,7 +25,7 @@ app.use(session({
 app.use(function (req, resp, next) {
   if (req.session.user) {
     next();
-  } else if (req.path == '/login') {
+  } else if (req.path == '/' || req.path == '/login') {
     next();
   } else {
     resp.redirect('/login');
@@ -138,6 +138,7 @@ app.post('/login', function(req, resp, next) {
 app.post('/logout', function (req,resp,next) {
   req.session.user = '';
   req.session.name = '';
+  resp.redirect('/login');
 });
 
 app.get('/restaurant/:id',function (req,resp,next) {
