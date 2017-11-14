@@ -26,12 +26,12 @@ app.use(function (req, resp, next) {
   if (req.session.user) {
 
     next();
-  } else if (req.path.startsWith('/addReview')) {
-    // req.session.returnTo = req.path;
-    console.log(req.session.returnTo);
+  } else if (req.path.startsWith('/addReview' || req.path == '/login')) {
+    // req.session.returnTo = req.path
     resp.redirect('/login');
   } else {
-
+    req.session.returnTo = req.path;
+    console.log(req.session.returnTo);
     next();
   }
 });
@@ -58,7 +58,7 @@ app.get('/search', function (req, resp, next) {
         name:req.session.name,
         results: results
       });
-      console.log(results);
+      // console.log(results);
     })
     .catch(next);
 });
@@ -164,7 +164,7 @@ app.get('/restaurant/:id',function (req,resp,next) {
   // console.log('My ID is ' +  id);
   db.any(q,id)
     .then(function (results) {
-      console.log(results);
+      // console.log(results);
       resp.render('restaurant.hbs', {title: 'Restaurant', results: results, name:req.session.name});
     })
     .catch(next);
