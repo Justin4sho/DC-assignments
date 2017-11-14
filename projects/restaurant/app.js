@@ -30,8 +30,8 @@ app.use(function (req, resp, next) {
     // req.session.returnTo = req.path
     resp.redirect('/login');
   } else {
-    req.session.returnTo = req.path;
-    console.log(req.session.returnTo);
+    // req.session.returnTo = req.path;
+    // console.log(req.session.returnTo);
     next();
   }
 });
