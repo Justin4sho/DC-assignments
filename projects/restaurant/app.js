@@ -51,6 +51,7 @@ app.get('/search', function (req, resp, next) {
     .then(function(results) {
       resp.render('search_results.hbs', {
         title:'Search Results',
+        name:req.session.name,
         results: results
       });
       console.log(results);
@@ -61,7 +62,7 @@ app.get('/search', function (req, resp, next) {
 
 app.get('/addReview', function(req, resp) {
   var id = req.query.id;
-  resp.render('addReview.hbs', {title: 'Add Review', id: id});
+  resp.render('addReview.hbs', {title: 'Add Review', id: id, name:req.session.name});
 });
 
 app.post('/addReview', function(req, resp, next) {
@@ -86,7 +87,7 @@ app.post('/addReview', function(req, resp, next) {
 });
 
 app.get('/restaurant/new', function(req, resp){
-  resp.render('addRestaurant.hbs', {title: 'Add a Restaurant'});
+  resp.render('addRestaurant.hbs', {title: 'Add a Restaurant', name:req.session.name});
 });
 
 app.post('/restaurant/submit_new', function(req, resp, next) {
@@ -152,7 +153,7 @@ app.get('/restaurant/:id',function (req,resp,next) {
   db.any(q,id)
     .then(function (results) {
       console.log(results);
-      resp.render('restaurant.hbs', {title: 'Restaurant', results: results});
+      resp.render('restaurant.hbs', {title: 'Restaurant', results: results, name:req.session.name});
     })
     .catch(next);
 

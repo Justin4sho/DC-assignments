@@ -12,17 +12,21 @@
 
   <button type="submit" value="submit">Add a Restaurant</button>
 </form>
-<form action="/login" method="get">
-    <label ></label>
+{{#if name}}
+  <form action="/logout" method="post">
+      <label ></label>
 
-  <button type="submit" value="submit">Login</button>
-</form>
-<form action="/logout" method="post">
-    <label ></label>
+    <button type="submit" value="submit">Logout</button>
+  </form>
+{{else}}
+  <form action="/login" method="get">
+      <label ></label>
 
-  <button type="submit" value="submit">Logout</button>
-</form>
+    <button type="submit" value="submit">Login</button>
+  </form>
 
+
+{{/if}}
 {{#if name}}
   Hello {{name}}
 {{/if}}
