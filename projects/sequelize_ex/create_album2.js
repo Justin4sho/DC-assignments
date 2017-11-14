@@ -17,10 +17,6 @@ var getUserInputs = new Promise(
       inputs.push(value);
       return prompt('Please enter the artist ID: ');
     })
-    .then(function (value) {
-      inputs.push(value);
-      return prompt('Would you like to enter another? Y or N  ');
-    })
     // then save the file name and return as resolved
     .then(function (value) {
       inputs.push(value);
@@ -34,6 +30,19 @@ var getUserInputs = new Promise(
     });
   }
 );
+var getUserInputs2 = new Promise(
+  function (resolve, reject) {
+    var inputs2 = [];
+
+    prompt('Would you like to add another? Y or N ')
+
+    .then(function (value) {
+      inputs.push(value);
+      prompt.done();
+      resolve(inputs2);
+    });
+  }
+);
 
 var writeAlbum = function (albumName, albumYear, artist_ID) {
   db.album.create({name:albumName, year:albumYear, artistId:artist_ID})
@@ -43,24 +52,27 @@ var writeAlbum = function (albumName, albumYear, artist_ID) {
   });
 }
 
+
 var main = function () {
-  var again = "Y";
-  while (again == "Y") {
-    getUserInputs
+  getUserInputs
+    .then(function (inputs) {
+      var albumName = inputs[0];
+      var albumYear = inputs[1];
+      var artistID = inputs[2];
+      writeAlbum(albumName, albumYear, artistID);
+      console.log(inputs);
+      return getUserInputs2
       .then(function (inputs) {
-        var albumName = inputs[0];
-        var albumYear = inputs[1];
-        var artistID = inputs[2];
-        var again = inputs[3];
-        writeAlbum(albumName, albumYear, artistID);
-        console.log(inputs);
-
-
+        if (inputs[0] == "Y") {
+          main();
+        }
       })
-      .catch(function (error) {
-        console.error(error);
-      });
-  }
+
+
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
 }
 
 // Execute the main function

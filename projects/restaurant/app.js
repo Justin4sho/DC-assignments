@@ -7,19 +7,41 @@ var pgp = require('pg-promise')({});
     // setup db
 var db = pgp({database: 'restaurant'});
 
+var session = require('express-session');
+
 app.use(body_parser.urlencoded({extended: false}));
 // sets up handlbars
 app.set('view engine', 'hbs');
 app.use(express.static('public'));
 
 
+app.use(session({
+  secret: process.env.SECRET_KEY || 'dev',
+  resave: true,
+  saveUninitialized: false,
+  cookie: {maxAge: 60000}
+}));
+
+app.use(function (req, resp, next) {
+  if (req.session.user) {
+    next();
+  } else if (req.path == '/login') {
+    next();
+  } else {
+    resp.redirect('/login');
+  }
+});
+
+
 //renders home page
 app.get('/', function (req, resp) {
   var context = {
-    title: 'Restaurant Reviews'
+    title: 'Restaurant Reviews',
+    name: req.session.name
   }
   resp.render('index.hbs',context);
 });
+
 //renders search results
 app.get('/search', function (req, resp, next) {
   var searchTerm = req.query.searchTerm;
@@ -40,7 +62,7 @@ app.get('/search', function (req, resp, next) {
 app.get('/addReview', function(req, resp) {
   var id = req.query.id;
   resp.render('addReview.hbs', {title: 'Add Review', id: id});
-})
+});
 
 app.post('/addReview', function(req, resp, next) {
   var id = req.body.id;
@@ -61,7 +83,7 @@ app.post('/addReview', function(req, resp, next) {
       resp.redirect('/restaurant/' + id);
     })
   .catch(next);
-})
+});
 
 app.get('/restaurant/new', function(req, resp){
   resp.render('addRestaurant.hbs', {title: 'Add a Restaurant'});
@@ -84,8 +106,39 @@ app.post('/restaurant/submit_new', function(req, resp, next) {
       resp.redirect('/restaurant/' + results.id);
     })
   .catch(next);
-})
+});
 
+app.get('/login', function(req, resp, next) {
+  resp.render('login.hbs',{ title: 'Login'});
+});
+
+app.post('/login', function(req, resp, next) {
+  var email = req.body.userName;
+  var password = req.body.password;
+  var q = 'SELECT * from reviewer \
+  WHERE email = $1';
+  db.one(q,email)
+    .then(function(results) {
+      console.log(results.password);
+      console.log(password);
+      if (results.password == password) {
+        req.session.user = results.email;
+        req.session.name = results.rev_name;
+        resp.redirect('/');
+      }
+      else {
+        resp.render('login.hbs',{ err: 'Incorrect Password' });
+      }
+    })
+    .catch(function (error) {
+      resp.render('login.hbs',{ err: 'Incorrect Login' });
+    });
+});
+
+app.post('/logout', function (req,resp,next) {
+  req.session.user = '';
+  req.session.name = '';
+});
 
 app.get('/restaurant/:id',function (req,resp,next) {
   var id = req.params.id;
