@@ -8,26 +8,31 @@ var pgp = require('pg-promise')({});
 var db = pgp({database: 'restaurant'});
 
 var session = require('express-session');
+//used for hashing PW
+var pbkdf2 = require('pbkdf2');
+var crypto = require('crypto');
+
 
 app.use(body_parser.urlencoded({extended: false}));
 // sets up handlbars
 app.set('view engine', 'hbs');
 app.use(express.static('public'));
 
-
+//set up session
 app.use(session({
   secret: process.env.SECRET_KEY || 'dev',
   resave: true,
   saveUninitialized: false,
   cookie: {maxAge: 60000}
 }));
-
+//more session middleware
 app.use(function (req, resp, next) {
   if (req.session.user) {
 
     next();
-  } else if (req.path.startsWith('/addReview' || req.path == '/login')) {
-    // req.session.returnTo = req.path
+  } else if (req.path.startsWith('/addReview')) {
+    console.log(req.originalUrl);
+    req.session.returnTo = req.originalUrl;
     resp.redirect('/login');
   } else {
     // req.session.returnTo = req.path;
@@ -114,6 +119,40 @@ app.post('/restaurant/submit_new', function(req, resp, next) {
   .catch(next);
 });
 
+app.get('/newUser', function(req,resp,next) {
+  resp.render('newUser', {title: 'New Account'})
+})
+
+app.post('/newUser', function(req, resp, next) {
+  var email = req.body.userName;
+  var password = req.body.password;
+  var rev_name = req.body.name;
+  var salt = crypto.randomBytes(20).toString('hex');
+  var key = pbkdf2.pbkdf2Sync(
+    password, salt, 36000, 256, 'sha256'
+  );
+  var hash = key.toString('hex');
+  var stored_pass = `pbkdf2_sha256$36000$${salt}$${hash}`;
+  var columns = {
+    email:email,
+    password: stored_pass,
+    rev_name: rev_name
+  }
+  var q = 'INSERT INTO reviewer \
+  VALUES (default, ${rev_name}, ${email}, NULL, ${password}) RETURNING id';
+  db.one(q,columns)
+    .then(function (results) {
+      console.log(results);
+      req.session.user = email;
+      req.session.name = rev_name;
+      req.session.rid = results.id;
+      resp.redirect('/');
+    })
+    .catch(function (error){
+      resp.render('newUser.hbs', {err: 'Username already exists'});
+    })
+})
+
 app.get('/login', function(req, resp, next) {
   resp.render('login.hbs',{ title: 'Login'});
 });
@@ -127,15 +166,24 @@ app.post('/login', function(req, resp, next) {
     .then(function(results) {
       console.log(results.password);
       console.log(password);
-      if (results.password == password) {
+      var pass = results.password
+      var pass_parts = results.password.split('$');
+      var key = pbkdf2.pbkdf2Sync(
+        password,
+        pass_parts[2],
+        parseInt(pass_parts[1]),
+        256, 'sha256'
+      );
+      var hash = key.toString('hex');
+      if (hash === pass_parts[3]) {
         req.session.user = results.email;
         req.session.name = results.rev_name;
         req.session.rid = results.id;
         console.log(results.id);
         console.log(req.session.rid);
-        // console.log(req.session.returnTo);
-        resp.redirect('/');
-        // req.session.returnTo = '';
+
+        resp.redirect(req.session.returnTo || '/');
+
       }
       else {
         resp.render('login.hbs',{ err: 'Incorrect Password' });
