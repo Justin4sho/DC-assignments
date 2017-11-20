@@ -5,6 +5,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
+//Need this for ontouch events
 injectTapEventPlugin();
 
 ReactDOM.render(<App />, document.getElementById('root'));

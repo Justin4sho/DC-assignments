@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-import getMuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import './App.css';
 
+import MyForm from './myform';
+
 class App extends Component {
   render() {
     return (
-      <h1>
-        Hi
-      </h1>
+      <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+        <MyForm/>
+      </MuiThemeProvider>
     )
   }
 }
