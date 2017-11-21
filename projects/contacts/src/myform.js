@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AppBar from 'material-ui/AppBar';
-
+import List from './list';
 import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 // import Divider from 'material-ui/Divider';
@@ -14,14 +14,15 @@ class MyForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      email: '',
-      phoneNumber: '',
-      address: '',
-      city: '',
-      state: '',
-      zip: '',
-
+      newPerson: {
+        name: '',
+        email: '',
+        phoneNumber: '',
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+      }
     }
   }
 
@@ -30,51 +31,55 @@ class MyForm extends Component {
     this.setState({[key]: event.target.value});
   }
 
-  update_select = (event, index, value) => {
-    this.setState({color: value});
-  }
 
   handle_submit(event) {
-    console.log('Submitted:' , this.state.name);
     event.preventDefault();
+    this.setState({newPerson: this.state})
+    // console.log(this.state.newPerson);
+
   }
 
   render() {
+
     return (
       <div>
         <AppBar title="Contacts"/>
         <Card className="md-card">
-          <form onSubmit={event => this.handle_submit(event)}>
+          <form>
             <CardTitle title="Add Contact" subtitle=""/>
             <CardText>
               <TextField floatingLabelText="Your Name"
-                defaultValue={this.state.name}
-                onChange={event => this.update_state(event, 'name')}/>
+                value={this.state.newPerson.name}
+                onChange={event => this.update_state(event, 'newPerson.name')}/>
               <TextField floatingLabelText="Your Email"
-                defaultValue={this.state.email}
+                defaultValue={this.state.newPerson.email}
                 onChange={event => this.update_state(event, 'email')}/>
               <TextField floatingLabelText="Your Phone Number"
-                defaultValue={this.state.number}
+                defaultValue={this.state.newPerson.number}
                 onChange={event => this.update_state(event, 'phoneNumber')}/>
               <TextField floatingLabelText="Your Address"
-                defaultValue={this.state.address}
+                defaultValue={this.state.newPerson.address}
                 onChange={event => this.update_state(event, 'address')}/>
               <TextField floatingLabelText="Your City"
-                defaultValue={this.state.city}
+                defaultValue={this.state.newPerson.city}
                 onChange={event => this.update_state(event, 'city')}/>
               <TextField floatingLabelText="Your State"
-                defaultValue={this.state.state}
+                defaultValue={this.state.newPerson.state}
                 onChange={event => this.update_state(event, 'state')}/>
               <TextField floatingLabelText="Your Zip Code"
-                defaultValue={this.state.zip}
+                defaultValue={this.state.newPerson.zip}
                 onChange={event => this.update_state(event, 'zip')}/>
             </CardText>
             <CardActions>
-              <RaisedButton label="Submit" primary={true}/>
+              <RaisedButton label="Add Contact" primary={true}
+              onClick={event => this.handle_submit(event)}/>
             </CardActions>
           </form>
         </Card>
+        <List person={this.state}/>
       </div>
+
+
     );
   }
 }
