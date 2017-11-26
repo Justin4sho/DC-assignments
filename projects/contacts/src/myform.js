@@ -51,7 +51,7 @@ class MyForm extends Component {
 
   handle_submit(event) {
     event.preventDefault();
-    //this.setState({newPerson: this.state});
+
 
     // add to this.state.contacts
     var person = {
