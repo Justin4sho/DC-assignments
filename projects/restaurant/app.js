@@ -16,7 +16,7 @@ var crypto = require('crypto');
 app.use(body_parser.urlencoded({extended: false}));
 // sets up handlbars
 app.set('view engine', 'hbs');
-app.use(express.static('public'));
+app.use('/static', express.static('public'));
 
 //set up session
 app.use(session({

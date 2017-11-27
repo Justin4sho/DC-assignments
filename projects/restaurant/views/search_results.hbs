@@ -1,11 +1,23 @@
-<h3>Restaurants:</h3>
-{{#each results}}
+<div class="row">
+  <div class="container-fluid">
+    <div class="col-8  mx-auto text-center" style="margin: 10% 0">
+      <h3>Restaurants:</h3>
+      {{#each results}}
 
-  <li> <a href="/restaurant/{{id}}">{{name}}</a>     <b>ADDRESS: </b> {{address}} <b>CATEGORY: </b>   {{category}}
+        <li> <a href="/restaurant/{{id}}">{{name}}</a><br/>
+             <b>ADDRESS: </b> {{address}} <br/>
+             <b>CATEGORY: </b>   {{category}}
 
-  </li>
+        </li>
+      {{/each}}
+    </div>
+  </div>
+</div>
 
-{{/each}}
 {{#if name}}
-  Hello {{name}}
+  <div class="row">
+    <div class="col-4 mx-auto text-center">
+      Hello, {{name}}!
+    </div>
+  </div>
 {{/if}}
